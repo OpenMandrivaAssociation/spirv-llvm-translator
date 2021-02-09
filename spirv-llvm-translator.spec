@@ -13,6 +13,7 @@ Group: Development/Tools
 BuildRequires: cmake ninja
 BuildRequires: cmake(llvm)
 BuildRequires: spirv-tools
+BuildRequires: %{_lib}gpuruntime
 
 %description
 Library for bi-directional translation between SPIR-V and LLVM IR
