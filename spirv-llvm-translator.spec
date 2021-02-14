@@ -21,9 +21,10 @@ BuildRequires: cmake ninja
 BuildRequires: cmake(llvm)
 BuildRequires: spirv-tools
 BuildRequires: %{_lib}gpuruntime
-
+%if %{with compat32}
 BuildRequires: libllvm-devel
 BuildRequires: libgpuruntime
+%endif
 
 %description
 Library for bi-directional translation between SPIR-V and LLVM IR
