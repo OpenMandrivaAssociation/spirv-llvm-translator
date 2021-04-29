@@ -9,10 +9,13 @@
 %define lib32name libLLVMSPIRVLib%{major}
 %define dev32name libLLVMSPIRVLib-devel
 
+# bd3916... is the last commit before the switch to LLVM 13
+%define git bd391609380a34685747206bc4acf890d6a04232
+
 Name: spirv-llvm-translator
-Version: 11.0.0
-Release: 2
-Source0: https://github.com/KhronosGroup/SPIRV-LLVM-Translator/archive/v%{version}/%{name}-%{version}.tar.gz
+Version: 12.0.0
+Release: 1
+Source0: https://github.com/KhronosGroup/SPIRV-LLVM-Translator/archive/%{git}.tar.gz
 Summary: Library for bi-directional translation between SPIR-V and LLVM IR
 URL: https://github.com/KhronosGroup/SPIRV-LLVM-Translator
 License: Apache 2.0
@@ -75,7 +78,7 @@ Library for bi-directional translation between SPIR-V and LLVM IR (32-bit)
 %endif
 
 %prep
-%autosetup -p1 -n SPIRV-LLVM-Translator-%{version}
+%autosetup -p1 -n SPIRV-LLVM-Translator-%{git}
 %if %{with compat32}
 %cmake32 -G Ninja \
 	-DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=ON
