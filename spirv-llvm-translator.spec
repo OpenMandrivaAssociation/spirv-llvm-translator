@@ -39,6 +39,9 @@ Group: System/Libraries
 %description -n %{libname}
 Library for bi-directional translation between SPIR-V and LLVM IR
 
+%files
+%{_bindir}/llvm-spirv
+
 %files -n %{libname}
 %{_libdir}/libLLVMSPIRVLib.so.%{major}*
 
@@ -97,9 +100,17 @@ cd ..
 
 %ninja_build -C build
 
+# Build the tool (for whatever reasons, its cmake files are set
+# up to work only when built inside the LLVM source tree, but
+# that's not actually necessary)
+clang++ %{optflags} -Iinclude -o llvm-spirv tools/llvm-spirv/llvm-spirv.cpp -Lbuild/lib/SPIRV -lLLVMSPIRVLib -lLLVMAnalysis -lLLVMBitReader -lLLVMBitWriter -lLLVMCore -lLLVMSupport -lLLVMTransformUtils
+
 %install
 %if %{with compat32}
 %ninja_install -C build32
 %endif
 
 %ninja_install -C build
+
+mkdir -p %{buildroot}%{_bindir}
+install -m 755 llvm-spirv %{buildroot}%{_bindir}/
