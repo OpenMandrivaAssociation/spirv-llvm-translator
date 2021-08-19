@@ -10,10 +10,12 @@
 %define dev32name libLLVMSPIRVLib-devel
 
 Name: spirv-llvm-translator
-Version: 12.0.0
-Release: 2
-# We're currently packaging commit 67d3e271a28287b2c92ecef2f5e98c49134e5946
-Source0: https://github.com/KhronosGroup/SPIRV-LLVM-Translator/archive/refs/heads/llvm_release_%{major}0.tar.gz
+Version: 13.0.0
+Release: 0.1
+# We're currently packaging commit 062788212ce7544b896afbce9dd210c4fea5c0ea
+#Source0: https://github.com/KhronosGroup/SPIRV-LLVM-Translator/archive/refs/heads/llvm_release_%{major}0.tar.gz
+# Last commit from master branch before the switch to LLVM 14 (there is no 13 branch so far)
+Source0: https://github.com/KhronosGroup/SPIRV-LLVM-Translator/archive/062788212ce7544b896afbce9dd210c4fea5c0ea.tar.gz
 Summary: Library for bi-directional translation between SPIR-V and LLVM IR
 URL: https://github.com/KhronosGroup/SPIRV-LLVM-Translator
 License: Apache 2.0
@@ -79,7 +81,7 @@ Library for bi-directional translation between SPIR-V and LLVM IR (32-bit)
 %endif
 
 %prep
-%autosetup -p1 -n SPIRV-LLVM-Translator-llvm_release_%{major}0
+%autosetup -p1 -n SPIRV-LLVM-Translator-062788212ce7544b896afbce9dd210c4fea5c0ea
 %if %{with compat32}
 %cmake32 -G Ninja \
 	-DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=ON
@@ -112,3 +114,9 @@ clang++ %{optflags} -Iinclude -o llvm-spirv tools/llvm-spirv/llvm-spirv.cpp -Lbu
 
 mkdir -p %{buildroot}%{_bindir}
 install -m 755 llvm-spirv %{buildroot}%{_bindir}/
+
+# Drop dupes from spirv-headers (for now -- in the longer run we may
+# want to replace badly maintained spirv-headers with this)
+rm -rf \
+	%{buildroot}%{_includedir}/spirv \
+	%{buildroot}%{_datadir}/cmake/SPIRV-Headers
